@@ -1,0 +1,11 @@
+name: negative_training_sampler
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - click
+  - pandas
+  - pybedtools
+  - dask
+
