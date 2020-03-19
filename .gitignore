@@ -134,5 +134,8 @@ dmypy.json
 # disable dask workerspace
 dask-worker-space/
 
+# disable TODO list:
+TODO.md
+
 # disable tests
 tests/
