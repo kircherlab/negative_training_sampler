@@ -6,9 +6,9 @@ This package takes a minimal bed file with positive (1) and negative (0) labeled
 
 ### Requirements
 
-It is highly recommended to use `conda` to install the dependencies.
+The negative_trainin_sampler uses pybedtools to calculate the GC content for the provided regions. Pybedtools depends on bedtools, so make sure bedtools is installed. Otherwise install it manually: [bedtools installation guide](https://bedtools.readthedocs.io/en/latest/content/installation.html)
 
-Dependencies:
+Other Dependencies:
 
 ```YAML
 dependencies:
@@ -18,40 +18,12 @@ dependencies:
   - dask
 ```
 
-**Note:** If pip is used for installation, make sure bedtools is installed. Otherwise install it manually: [bedtools installation guide](https://bedtools.readthedocs.io/en/latest/content/installation.html)
-
 ### Setup
 
-#### with conda
-
-Creating a new environment:
-
-```bash
-conda env create -f environment.yml
-conda activate negative_training_sampler
-```
-
-Updating an existing environment:
-
-```bash
-conda env update --name myenv --file environment.yml
-conda activate myenv
-```
-
 Installing the package:
 
 ```bash
-pip install /path/to/repo
-```
-
-### without conda
-
-**Note:** Make sure bedtools is installed. Otherwise install it manually: [bedtools installation guide](https://bedtools.readthedocs.io/en/latest/content/installation.html)
-
-Installing the package:
-
-```bash
-pip install /path/to/repo
+pip install -e /path/to/repo
 ```
 
 ## Usage

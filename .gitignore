@@ -136,6 +136,7 @@ dask-worker-space/
 
 # disable TODO list:
 TODO.md
+improvements/
 
 # disable tests
 tests/
