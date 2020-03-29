@@ -47,7 +47,7 @@ negative_input_sampler LABEL_FILE GENOME_FILE -o OUTPUT_FILE --cores INT --memor
 The help message of the command line interface can be accesssed by typing:
 
 ```bash
-python negative_training_sampler --help
+negative_training_sampler --help
 ```
 
 Help output:
