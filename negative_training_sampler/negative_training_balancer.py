@@ -1,7 +1,6 @@
 """Main module."""
 
 import logging
-logging.basicConfig(level=logging.WARNING)
 
 import sys
 
@@ -43,16 +42,17 @@ def balance_trainingdata(label_file,
                                     Accepted format [number]GB. Default is 2GB]
     """
 
+    logLevel = logging.WARNING
     if verbose:
-        logging.basicConfig(level=logging.DEBUG)
+        logLevel = logging.DEBUG
     if log_file is not None:
-        logging.basicConfig(filename=log_file)
+        logging.basicConfig(filename=log_file, level=logLevel)
     elif output_file is not None:
-        logging.basicConfig(stream=sys.stdout)
+        logging.basicConfig(stream=sys.stdout, level=logLevel)
     else:
-        logging.basicConfig(stream=sys.stderr)
+        logging.basicConfig(stream=sys.stderr, level=logLevel)
 
-    logging.debug("---------------------\nstarting workers...\n---------------------")
+    logging.info("---------------------\nstarting workers...\n---------------------")
 
     client = Client(n_workers=cores,
                     threads_per_worker=1,
@@ -60,31 +60,31 @@ def balance_trainingdata(label_file,
                     dashboard_address=None)
     client # pylint: disable=pointless-statement
 
-    logging.debug("---------------------\ncalculating GC content...\n---------------------")
+    logging.info("---------------------\ncalculating GC content...\n---------------------")
 
     cl_gc = get_gc(label_file, reference_file)
 
-    logging.debug("---------------------\nextracting positive samples...\n---------------------")
+    logging.info("---------------------\nextracting positive samples...\n---------------------")
 
     positive_sample = get_positive(cl_gc)
 
-    logging.debug("---------------------\nbalancing negative sample set...\n---------------------")
+    logging.info("---------------------\nbalancing negative sample set...\n---------------------")
 
     dts = dict(cl_gc.dtypes)
     negative_sample = (cl_gc.groupby(["CHR"], group_keys=False).apply(get_negative,
                                                                       meta=dts)
                        ).compute()
 
-    logging.debug("---------------------\nloading contigs...\n---------------------")
+    logging.info("---------------------\nloading contigs...\n---------------------")
 
     contigs = load_contigs(genome_file)
 
-    logging.debug("---------------------\ncleaning samples\n---------------------")
+    logging.info("---------------------\ncleaning samples\n---------------------")
 
     positive_sample_cleaned = clean_sample(positive_sample, contigs)
     negative_sample_cleaned = clean_sample(negative_sample, contigs)
 
-    logging.debug("---------------------\nsaving results\n---------------------")
+    logging.info("---------------------\nsaving results\n---------------------")
 
     sample_df = combine_samples(positive_sample_cleaned, negative_sample_cleaned)
 
@@ -93,6 +93,6 @@ def balance_trainingdata(label_file,
     else:
         write_to_stdout(sample_df)
 
-    logging.debug("---------------------\nshutting down workers...\n---------------------")
+    logging.info("---------------------\nshutting down workers...\n---------------------")
 
     client.close()

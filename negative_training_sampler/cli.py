@@ -28,7 +28,7 @@ from negative_training_sampler.negative_training_balancer import balance_trainin
               'output_file',
               type=click.Path(writable=True),
               help="Path to output file.")
-@click.option("-g",
+@click.option("-c",
               "--bgzip",
               is_flag=True,
               help="Output will be bgzipped.")
