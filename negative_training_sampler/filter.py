@@ -3,6 +3,7 @@
 """calculates gc content for coordinates in a .bed file"""
 
 import pandas as pd
+import logging
 
 def get_negative(df):
     """Samples negative labeled entries of a dataframe
@@ -25,8 +26,8 @@ def get_negative(df):
         neg = cleaned_df.loc[cleaned_df["gc"] == gc]
 
         if len(neg) == 0:
-            print("len of neg: {}".format(len(neg)),file=sys.stderr)
-            print(gc, count, file=sys.stderr)
+            logging.info("len of neg: {}")
+            logging.info(gc, count)
         else:
             frac = count/len(neg)
             neg_sample = neg_sample.append(neg
