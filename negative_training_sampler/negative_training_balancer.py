@@ -19,7 +19,12 @@ CHROMS = ["chr1", "chr2", "chr3",
           "chr19", "chr20", "chr21",
           "chr22", "chrX", "chrY"]
 
-def balance_trainingdata(label_file, genome_file, output_file, verbose, cores=1, memory_per_core='2GB'):
+def balance_trainingdata(label_file,
+                         genome_file,
+                         output_file,
+                         verbose,
+                         cores=1,
+                         memory_per_core='2GB'):
     """
     Function that calculates the GC content for positive and negative labeled genomic regions and
     balances their number based on GC content per chromosome.
@@ -41,7 +46,7 @@ def balance_trainingdata(label_file, genome_file, output_file, verbose, cores=1,
                     threads_per_worker=1,
                     memory_limit=memory_per_core,
                     dashboard_address=None)
-    client
+    client # pylint: disable=pointless-statement
 
     if verbose:
         print("---------------------\ncalculating GC content...\n---------------------")

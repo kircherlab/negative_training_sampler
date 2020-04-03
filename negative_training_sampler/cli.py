@@ -30,6 +30,7 @@ from negative_training_sampler.negative_training_balancer import balance_trainin
               default="2GB",
               help="""amount of memory per core (e.g. 2 cores * 2GB = 4GB)\ndefault: 2GB""")
 def cli(label_file, genome_file, output_file, verbose, cores, memory):
+    # pylint: disable=no-value-for-parameter
     '''
     A simple script that takes a tsv file with positive and negative labels
     and a genome file. Generates negative samples with the same GC distribution
@@ -46,4 +47,4 @@ def cli(label_file, genome_file, output_file, verbose, cores, memory):
 
 
 if __name__ == "__main__":
-    sys.exit(cli())  # pragma: no cover
+    sys.exit(cli())  # pylint: disable=no-value-for-parameter
