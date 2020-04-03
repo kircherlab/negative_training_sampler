@@ -7,21 +7,25 @@ from negative_training_sampler.negative_training_balancer import balance_trainin
 @click.command()
 @click.option("-i",
               "--label-file",
+              'label_file',
               required=True,
               type=click.Path(),
               help="Input bed file with labeled regions")
 @click.option("-r",
               "--reference-file",
+              'reference_file',
               required=True,
               type=click.Path(),
               help="Input genome reference in fasta format")
 @click.option("-g",
               "--genome-file",
+              'genome_file',
               required=True,
               type=click.Path(),
               help="Input genome file of reference")
 @click.option("-o",
               "--output-file",
+              'output_file',
               #default="samples.tsv",
               help="""path to output file; \ndefault:
                       ./[positive, negative]_samples.tsv""")
