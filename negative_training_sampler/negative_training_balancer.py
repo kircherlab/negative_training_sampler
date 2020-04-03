@@ -43,14 +43,16 @@ def balance_trainingdata(label_file,
     """
 
     logLevel = logging.WARNING
+    format='%(message)s'
     if verbose:
         logLevel = logging.DEBUG
+        format = "%(asctime)s: %(levelname)s - %(message)s"
     if log_file is not None:
-        logging.basicConfig(filename=log_file, level=logLevel)
+        logging.basicConfig(filename=log_file, level=logLevel, format=format)
     elif output_file is not None:
-        logging.basicConfig(stream=sys.stdout, level=logLevel)
+        logging.basicConfig(stream=sys.stdout, level=logLevel, format=format)
     else:
-        logging.basicConfig(stream=sys.stderr, level=logLevel)
+        logging.basicConfig(stream=sys.stderr, level=logLevel, format=format)
 
     logging.info("---------------------\nstarting workers...\n---------------------")
 
