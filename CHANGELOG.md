@@ -4,6 +4,8 @@
 
 - use a genome file of the fasta for the contigs by `--genome-file` (see #7) to avoid hard-coded contigs. Now this sampler should work with every species.
 
+- adding a logger using logging. with --log the log file can be written.
+
 ### Issue #6
 
 - reworked CLI
