@@ -6,22 +6,15 @@ from negative_training_sampler.bed_gc_calculator import get_gc
 from negative_training_sampler.filter import get_negative
 from negative_training_sampler.filter import get_positive
 from negative_training_sampler.filter import clean_sample
-<<<<<<< HEAD
 from negative_training_sampler.io import write_to_file
 from negative_training_sampler.io import write_to_stdout
-=======
-from negative_training_sampler.io import save_to_file
 from negative_training_sampler.io import load_contigs
->>>>>>> 1fec9f0e71fe7eb0d899fa5d4a4125a6421d5ec5
 from negative_training_sampler.utils import combine_samples
 
 
 def balance_trainingdata(label_file,
                          reference_file,
-<<<<<<< HEAD
-=======
                          genome_file,
->>>>>>> 1fec9f0e71fe7eb0d899fa5d4a4125a6421d5ec5
                          output_file,
                          bgzip,
                          verbose,
@@ -34,14 +27,9 @@ def balance_trainingdata(label_file,
     Arguments:
         label_file {str}        -- [Path to a .bed file containing genomic regions
                                     labeled as positive(1) or negative(0)]
-<<<<<<< HEAD
-        reference_file {str}    -- [Path to a refrence genome in FASTA format]
-        output_file {str}       -- [Name of the output file. File will be in .bed format.]
-=======
         reference_file {str}    -- [Path to a reference genome in FASTA format]
         genome_file {str}       -- [Path to the genome file of the reference]
-        output_file {str}       -- [Name of the output file. File will be in .tsv format.]
->>>>>>> 1fec9f0e71fe7eb0d899fa5d4a4125a6421d5ec5
+        output_file {str}       -- [Name of the output file. File will be in .bed format]
         cores {int}             -- [Number of cores, default is 1. ]
         memory_per_core {str}   -- [Amount of memory per core.
                                     Accepted format [number]GB. Default is 2GB]
@@ -60,10 +48,6 @@ def balance_trainingdata(label_file,
         print("---------------------\ncalculating GC content...\n---------------------")
 
     cl_gc = get_gc(label_file, reference_file)
-<<<<<<< HEAD
-
-=======
->>>>>>> 1fec9f0e71fe7eb0d899fa5d4a4125a6421d5ec5
 
     if verbose:
         print("---------------------\nextracting positive samples...\n---------------------")
