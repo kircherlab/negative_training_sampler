@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 """i/o functions"""
+
+import csv
 import sys
 
 from . import bgzf
@@ -30,3 +32,20 @@ def write_to_stdout(sample_df):
     """
 
     print(sample_df.to_string(index=False, header=False), file=sys.stdout)
+
+def load_contigs(genome_file):
+    """loads a genome file of the reference.
+
+    Arguments:
+        genome_file {str} -- [path to the genome file]
+
+    Returns:
+        [list] -- list containing contigs of the genome file
+    """
+
+    contigs = set()
+    with open(genome_file) as file:
+        genome_file_reader = csv.reader(file, delimiter='\t')
+        for contig in genome_file_reader:
+            contigs.add(contig[0])
+    return list(contigs)
