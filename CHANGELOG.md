@@ -10,11 +10,11 @@
     - input is now connected to the -i flag
     - refrence is now connected to the -r flag
     - added --verbose flag
-    - added -g (--bgzip) flag
+    - added -c (--bgzip) flag
 
 - added bgzip support for -o
-    - output file is bgzipped if -g flag is set
-    - output file is bgzipped if filename ends with `.gz`, even if -g is not set
+    - output file is bgzipped if -c flag is set
+    - output file is bgzipped if filename ends with `.gz`, even if -c is not set
 
 - changed how output works
     - positive and negative labeled entries are now saved in one file
