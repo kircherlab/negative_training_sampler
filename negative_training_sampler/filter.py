@@ -50,6 +50,7 @@ def get_positive(df):
 def clean_sample(df, chroms):
     """Sorts entries in dataframe by chromosome
     and drops an indexlevel in case of a multiindex.
+    Removes entries where contig is not present.
 
     Arguments:
         df {dataframe} -- [dataframe containing labeled genomic coordinates]
