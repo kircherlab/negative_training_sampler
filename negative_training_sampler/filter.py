@@ -64,8 +64,8 @@ def clean_sample(df, chroms):
                             ordered=True)
     if isinstance(df.index, pd.MultiIndex):
         df = df.droplevel(0)
-    df_cleaned = (df.sort_values(by=["CHR", "START"])
-                  .dropna()
+    df_cleaned = (df.dropna()
+                  .sort_values(by=["CHR", "START"])
                   .reset_index()
                   .drop(columns="index"))
     return df_cleaned
