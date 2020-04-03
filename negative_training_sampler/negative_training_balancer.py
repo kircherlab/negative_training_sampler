@@ -9,6 +9,8 @@ from negative_training_sampler.filter import get_positive
 from negative_training_sampler.filter import clean_sample
 from negative_training_sampler.io import save_to_file
 from negative_training_sampler.utils import combine_samples
+from negative_training_sampler.utils import load_contigs
+
 
 def balance_trainingdata(label_file,
                          reference_file,
