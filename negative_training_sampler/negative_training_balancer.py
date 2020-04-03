@@ -30,10 +30,10 @@ def balance_trainingdata(label_file,
     balances their number based on GC content per chromosome.
 
     Arguments:
-        label_file {str}        -- [Path to a tab separated file containing genomic regions
+        label_file {str}        -- [Path to a .bed file containing genomic regions
                                     labeled as positive(1) or negative(0)]
-        genome_file {str}       -- [Path to a refrence genome in FASTA format]
-        output_file {str}       -- [Name of the output file. File will be in .tsv format.]
+        reference_file {str}    -- [Path to a refrence genome in FASTA format]
+        output_file {str}       -- [Name of the output file. File will be in .bed format.]
         cores {int}             -- [Number of cores, default is 1. ]
         memory_per_core {str}   -- [Amount of memory per core.
                                     Accepted format [number]GB. Default is 2GB]
