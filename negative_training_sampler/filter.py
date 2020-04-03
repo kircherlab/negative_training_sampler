@@ -25,8 +25,8 @@ def get_negative(df):
         neg = cleaned_df.loc[cleaned_df["gc"] == gc]
 
         if len(neg) == 0:
-            print("len of neg: {}".format(len(neg)))
-            print(gc, count)
+            print("len of neg: {}".format(len(neg)),file=sys.stderr)
+            print(gc, count, file=sys.stderr)
         else:
             frac = count/len(neg)
             neg_sample = neg_sample.append(neg
