@@ -56,7 +56,7 @@ Help output:
 Usage: negative_training_sampler [OPTIONS]
 
   A simple script that takes a tsv file with positive and negative labels
-  and a genome file. Generates negative samples with the same GC
+  and a reference file. Generates negative samples with the same GC
   distribution as the positive samples per chromosome.
 
 Options:
@@ -65,9 +65,9 @@ Options:
                              [required]
 
   -g, --genome-file PATH     Input genome file of reference  [required]
-  -o, --output-file TEXT     path to output file;  default:
-                             ./[positive, negative]_samples.tsv
-
+  -o, --output_file PATH     Path to output file.
+  -c, --bgzip                Output will be bgzipped.
+  --log PATH                 Write logging to this file.
   --verbose                  Will print verbose messages.
   --cores INTEGER            number of used cores default: 1
   --memory TEXT              amount of memory per core (e.g. 2 cores * 2GB =
