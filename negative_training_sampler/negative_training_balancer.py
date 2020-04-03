@@ -43,10 +43,10 @@ def balance_trainingdata(label_file,
     """
 
     logLevel = logging.INFO
-    format=logging.Formatter('%(message)s')
+    format='%(message)s'
     if verbose:
         logLevel = logging.DEBUG
-        format=logging.Formatter()
+        format = None #logging.Formatter(None) #logging.Formatter('%(message)s')
     if log_file is not None:
         logging.basicConfig(filename=log_file, level=logLevel, format=format)
     elif output_file is not None:
