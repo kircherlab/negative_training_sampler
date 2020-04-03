@@ -2,8 +2,9 @@
 
 ## development
 
-- rename genome_file to reference-file
 - use a genome file of the fasta for the contigs by `--genome-file` (see #7) to avoid hard-coded contigs. Now this sampler should work with every species.
+
+### Issue #6
 
 - reworked CLI
     - input is now connected to the -i flag
@@ -21,6 +22,7 @@
 
 - minor bugfixes
     - debug output is now written to stderr
+    - rename genome_file to reference-file
 
 ## v0.1.0
 
