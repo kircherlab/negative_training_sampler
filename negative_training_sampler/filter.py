@@ -3,6 +3,7 @@
 """calculates gc content for coordinates in a .bed file"""
 
 import pandas as pd
+import logging
 
 def get_negative(df):
     """Samples negative labeled entries of a dataframe
@@ -25,8 +26,8 @@ def get_negative(df):
         neg = cleaned_df.loc[cleaned_df["gc"] == gc]
 
         if len(neg) == 0:
-            print("len of neg: {}".format(len(neg)))
-            print(gc, count)
+            logging.info("len of neg: {}")
+            logging.info(gc, count)
         else:
             frac = count/len(neg)
             neg_sample = neg_sample.append(neg
@@ -50,6 +51,7 @@ def get_positive(df):
 def clean_sample(df, chroms):
     """Sorts entries in dataframe by chromosome
     and drops an indexlevel in case of a multiindex.
+    Removes entries where contig is not present.
 
     Arguments:
         df {dataframe} -- [dataframe containing labeled genomic coordinates]
@@ -63,7 +65,8 @@ def clean_sample(df, chroms):
                             ordered=True)
     if isinstance(df.index, pd.MultiIndex):
         df = df.droplevel(0)
-    df_cleaned = (df.sort_values(by=["CHR", "START"])
+    df_cleaned = (df.dropna()
+                  .sort_values(by=["CHR", "START"])
                   .reset_index()
                   .drop(columns="index"))
     return df_cleaned

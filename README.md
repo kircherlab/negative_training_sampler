@@ -33,13 +33,13 @@ The package needs a minimal bed file with positive (1) and negative (0) labeled 
 General use:
 
 ```bash
-negative_input_sampler LABEL_FILE GENOME_FILE -o OUTPUT_FILE
+negative_input_sampler -i LABEL_FILE -r REFERENCE_FILE -g GENOME_FILE -o OUTPUT_FILE
 ```
 
 More advanced use:
 
 ```bash
-negative_input_sampler LABEL_FILE GENOME_FILE -o OUTPUT_FILE --cores INT --memory [int]GB
+negative_input_sampler -i LABEL_FILE -r REFERENCE_FILE -g GENOME_FILE -o OUTPUT_FILE --cores INT --memory [int]GB
 ```
 
 ### help
@@ -53,21 +53,27 @@ negative_training_sampler --help
 Help output:
 
 ```bash
-Usage: negative_training_sampler [OPTIONS] LABEL_FILE GENOME_FILE
+Usage: negative_training_sampler [OPTIONS]
 
   A simple script that takes a tsv file with positive and negative labels
-  and a genome file. Generates negative samples with the same GC
+  and a reference file. Generates negative samples with the same GC
   distribution as the positive samples per chromosome.
 
 Options:
-  -o, --output_file TEXT  path to output file;  default:
-                          ./[positive, negative]_samples.tsv
+  -i, --label-file PATH      Input bed file with labeled regions  [required]
+  -r, --reference-file PATH  Input genome reference in fasta format
+                             [required]
 
-  --cores INTEGER         number of used cores default: 1
-  --memory TEXT           amount of memory per core (e.g. 2 cores * 2GB = 4GB)
-                          default: 2GB
+  -g, --genome-file PATH     Input genome file of reference  [required]
+  -o, --output_file PATH     Path to output file.
+  -c, --bgzip                Output will be bgzipped.
+  --log PATH                 Write logging to this file.
+  --verbose                  Will print verbose messages.
+  --cores INTEGER            number of used cores default: 1
+  --memory TEXT              amount of memory per core (e.g. 2 cores * 2GB =
+                             4GB) default: 2GB
 
-  --help                  Show this message and exit.
+  --help                     Show this message and exit.
 ```
 
 ### input
