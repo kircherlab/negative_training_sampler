@@ -48,6 +48,6 @@ setup(
 #    test_suite='tests',
 #    tests_require=test_requirements,
     url='https://github.com/sroener/negative_training_sampler',
-    version='0.1.0-dev',
+    version='0.2.0',
     zip_safe=False,
 )
