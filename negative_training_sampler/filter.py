@@ -5,9 +5,6 @@
 import logging
 import pandas as pd
 
-# TODO catch frac > 1
-# TODO remove pos if neg not present
-
 def get_negative(df):
     """Samples negative labeled entries of a dataframe
     according to the gc content of the positive labeled entires.
@@ -33,9 +30,9 @@ def get_negative(df):
             logging.info(gc, count)
         else:
             if (count > len(neg)):
-                n=len(neg)
+                n = len(neg)
             else:
-                n=count
+                n = count
             neg_sample = neg_sample.append(neg
                                            .sample(n=n, random_state=1)
                                            )
