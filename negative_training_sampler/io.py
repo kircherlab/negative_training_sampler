@@ -31,7 +31,7 @@ def write_to_stdout(sample_df):
         bgzip {bool} -- [bool value to determine, whether output is bgzipped or not.]
     """
 
-    print(sample_df.to_string(index=False, header=False), file=sys.stdout)
+    print(sample_df.to_csv(index=False, header=False, sep='\t'), file=sys.stdout)
 
 def load_contigs(genome_file):
     """loads a genome file of the reference.
