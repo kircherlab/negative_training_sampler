@@ -29,9 +29,12 @@ def get_negative(df):
             logging.info("len of neg: {}")
             logging.info(gc, count)
         else:
-            frac = count/len(neg)
+            if (count > len(neg)):
+                n=len(neg)
+            else:
+                n=count
             neg_sample = neg_sample.append(neg
-                                           .sample(frac=frac, random_state=1)
+                                           .sample(n=n, random_state=1)
                                            )
     return neg_sample
 
