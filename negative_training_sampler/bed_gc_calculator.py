@@ -23,7 +23,7 @@ def generate_colnames(df):
     colnames.append("num_N")
     return colnames
 
-def get_gc(label_file, genome_file):
+def get_gc(label_file, genome_file, precision=2):
     """Calculates gc content for all viable entries in an input dataframe.
 
     Arguments:
@@ -42,6 +42,7 @@ def get_gc(label_file, genome_file):
     gc_df.columns = colnames
     gc_df = gc_df.loc[gc_df.num_N == 0].drop("num_N", axis=1)
     gc_df["gc"] = gc_df["gc"].astype("float32")*100
+    gc_df["gc"] = gc_df["gc"].round(precision)
     return gc_df
 
 # TODO add functionality for command line use

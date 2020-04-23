@@ -18,6 +18,7 @@ from negative_training_sampler.utils import combine_samples
 
 def balance_trainingdata(label_file,
                          reference_file,
+                         precision,
                          genome_file,
                          output_file,
                          bgzip,
@@ -33,6 +34,7 @@ def balance_trainingdata(label_file,
         label_file {str}        -- [Path to a .bed file containing genomic regions
                                     labeled as positive(1) or negative(0)]
         reference_file {str}    -- [Path to a reference genome in FASTA format]
+        reference_file {int}    -- [Precision of decimals when computing the attributes like GC content]
         genome_file {str}       -- [Path to the genome file of the reference]
         output_file {str}       -- [Name of the output file. File will be in .bed format]
         bgzip {boolean}         -- [output is compressed or not]
@@ -64,7 +66,7 @@ def balance_trainingdata(label_file,
 
     logging.info("---------------------\ncalculating GC content...\n---------------------")
 
-    cl_gc = get_gc(label_file, reference_file)
+    cl_gc = get_gc(label_file, reference_file, precision)
 
     logging.info("---------------------\nextracting positive samples...\n---------------------")
 

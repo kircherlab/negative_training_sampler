@@ -1,5 +1,11 @@
 # negative_training_sampler Changelog
 
+## develop
+
+- adding command line option --precision to round the precision of decimals defining smaller or larger GC buckets
+- bugfix when number negatives != 0 but positives > negatives
+- bugfix in stdn out (is now tab separated)
+
 ## v0.2.0
 
 - use a genome file of the fasta for the contigs by `--genome-file` (see #7) to avoid hard-coded contigs. Now this sampler should work with every species.
