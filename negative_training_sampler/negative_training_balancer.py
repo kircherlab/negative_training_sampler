@@ -97,7 +97,7 @@ def balance_trainingdata(label_file,
     if output_file:
         write_to_file(sample_df, output_file, bgzip)
     else:
-        write_to_stdout(sample_df)
+        write_to_stdout(sample_df, precision)
 
     logging.info("---------------------\nshutting down workers...\n---------------------")
 
