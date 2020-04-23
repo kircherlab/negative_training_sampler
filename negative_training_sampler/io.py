@@ -23,15 +23,16 @@ def write_to_file(sample_df, output_file, bgzip):
         with open(output_file, "w") as file:
             sample_df.to_csv(file, sep="\t", index=False, header=False)
 
-def write_to_stdout(sample_df):
+def write_to_stdout(sample_df, precision):
     """Writes df to stdout.
 
     Arguments:
         sample_df {dataframe} -- [dataframe containing balanced samples]
         bgzip {bool} -- [bool value to determine, whether output is bgzipped or not.]
     """
-
-    print(sample_df.to_csv(index=False, header=False, sep='\t'), file=sys.stdout)
+    fformat = "%.{}f".format(precision)
+    print(sample_df.to_csv(index=False, header=False, sep='\t', float_format=fformat),
+          file=sys.stdout)
 
 def load_contigs(genome_file):
     """loads a genome file of the reference.
