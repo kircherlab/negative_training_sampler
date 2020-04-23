@@ -12,6 +12,12 @@
 
 - adding a logger using logging. with --log the log file can be written.
 
+### Issue #5
+
+- complete support for bed files
+- added option to specify number of label columns
+- minor refactoring
+
 ### Issue #6
 
 - reworked CLI

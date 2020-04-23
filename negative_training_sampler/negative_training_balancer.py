@@ -18,9 +18,10 @@ from negative_training_sampler.utils import combine_samples
 
 def balance_trainingdata(label_file,
                          reference_file,
-                         precision,
                          genome_file,
                          output_file,
+                         precision,
+                         label_num,
                          bgzip,
                          log_file,
                          verbose,
@@ -34,9 +35,10 @@ def balance_trainingdata(label_file,
         label_file {str}        -- [Path to a .bed file containing genomic regions
                                     labeled as positive(1) or negative(0)]
         reference_file {str}    -- [Path to a reference genome in FASTA format]
-        reference_file {int}    -- [Precision of decimals when computing the attributes like GC content]
         genome_file {str}       -- [Path to the genome file of the reference]
         output_file {str}       -- [Name of the output file. File will be in .bed format]
+        precision {int}         -- [Precision of decimals when computing the attributes like GC content]
+        label_num {int}         -- [Number of provided label columns]
         bgzip {boolean}         -- [output is compressed or not]
         log_file {str}          -- [Log file to write out loggin. If not None.]
         cores {int}             -- [Number of cores, default is 1. ]
@@ -44,17 +46,17 @@ def balance_trainingdata(label_file,
                                     Accepted format [number]GB. Default is 2GB]
     """
 
-    logLevel = logging.INFO
-    format='%(message)s'
+    loglevel = logging.INFO
+    logformat = '%(message)s'
     if verbose:
-        logLevel = logging.DEBUG
-        format = "%(asctime)s: %(levelname)s - %(message)s"
+        loglevel = logging.DEBUG
+        logformat = "%(asctime)s: %(levelname)s - %(message)s"
     if log_file is not None:
-        logging.basicConfig(filename=log_file, level=logLevel, format=format)
+        logging.basicConfig(filename=log_file, level=loglevel, format=logformat)
     elif output_file is not None:
-        logging.basicConfig(stream=sys.stdout, level=logLevel, format=format)
+        logging.basicConfig(stream=sys.stdout, level=loglevel, format=logformat)
     else:
-        logging.basicConfig(stream=sys.stderr, level=logLevel, format=format)
+        logging.basicConfig(stream=sys.stderr, level=loglevel, format=logformat)
 
     logging.info("---------------------\nstarting workers...\n---------------------")
 
@@ -66,7 +68,7 @@ def balance_trainingdata(label_file,
 
     logging.info("---------------------\ncalculating GC content...\n---------------------")
 
-    cl_gc = get_gc(label_file, reference_file, precision)
+    cl_gc = get_gc(label_file, reference_file, label_num, precision)
 
     logging.info("---------------------\nextracting positive samples...\n---------------------")
 
@@ -75,8 +77,8 @@ def balance_trainingdata(label_file,
     logging.info("---------------------\nbalancing negative sample set...\n---------------------")
 
     dts = dict(cl_gc.dtypes)
-    negative_sample = (cl_gc.groupby(["CHR"], group_keys=False).apply(get_negative,
-                                                                      meta=dts)
+    negative_sample = (cl_gc.groupby(["chrom"], group_keys=False).apply(get_negative,
+                                                                        meta=dts)
                        ).compute()
 
     logging.info("---------------------\nloading contigs...\n---------------------")

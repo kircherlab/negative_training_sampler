@@ -9,29 +9,33 @@ from negative_training_sampler.negative_training_balancer import balance_trainin
               "--label-file",
               'label_file',
               required=True,
-              type=click.Path(exists=True,readable=True),
+              type=click.Path(exists=True, readable=True),
               help="Input bed file with labeled regions")
 @click.option("-r",
               "--reference-file",
               'reference_file',
               required=True,
-              type=click.Path(exists=True,readable=True),
+              type=click.Path(exists=True, readable=True),
               help="Input genome reference in fasta format")
 @click.option("-g",
               "--genome-file",
               'genome_file',
               required=True,
-              type=click.Path(exists=True,readable=True),
+              type=click.Path(exists=True, readable=True),
               help="Input genome file of reference")
-@click.option("--precision",
-              default=2,
-              type=int,
-              help="Precision of decimals when computing the attributes like GC content.")
 @click.option("-o",
               "--output_file",
               'output_file',
               type=click.Path(writable=True),
               help="Path to output file.")
+@click.option("-n",
+              "--label_num",
+              type=click.INT,
+              help="Number of separate label columns.")
+@click.option("--precision",
+              default=2,
+              type=int,
+              help="Precision of decimals when computing the attributes like GC content.")
 @click.option("-c",
               "--bgzip",
               is_flag=True,
@@ -50,7 +54,8 @@ from negative_training_sampler.negative_training_balancer import balance_trainin
 @click.option("--memory",
               default="2GB",
               help="amount of memory per core (e.g. 2 cores * 2GB = 4GB)\ndefault: 2GB")
-def cli(label_file, reference_file, precision, genome_file, output_file, bgzip, log_file, verbose, cores, memory): # pylint: disable=no-value-for-parameter
+def cli(label_file, reference_file, genome_file, output_file, precision, label_num,
+        bgzip, log_file, verbose, cores, memory): # pylint: disable=no-value-for-parameter
     '''
     A simple script that takes a tsv file with positive and negative labels
     and a reference file. Generates negative samples with the same GC distribution
@@ -62,6 +67,7 @@ def cli(label_file, reference_file, precision, genome_file, output_file, bgzip, 
                          genome_file=genome_file,
                          precision=precision,
                          output_file=output_file,
+                         label_num=label_num,
                          bgzip=bgzip,
                          log_file=log_file,
                          verbose=verbose,

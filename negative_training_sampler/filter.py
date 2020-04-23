@@ -2,8 +2,11 @@
 
 """calculates gc content for coordinates in a .bed file"""
 
-import pandas as pd
 import logging
+import pandas as pd
+
+# TODO catch frac > 1
+# TODO remove pos if neg not present
 
 def get_negative(df):
     """Samples negative labeled entries of a dataframe
