@@ -64,8 +64,8 @@ def clean_sample(df, chroms):
         [dataframe] -- [sorted and cleaned dataframe]
     """
     df.chrom = pd.Categorical(df.chrom,
-                            categories=chroms,
-                            ordered=True)
+                              categories=chroms,
+                              ordered=True)
     if isinstance(df.index, pd.MultiIndex):
         df = df.droplevel(0)
     df_cleaned = (df.dropna()

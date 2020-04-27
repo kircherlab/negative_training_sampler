@@ -89,6 +89,8 @@ def balance_trainingdata(label_file,
 
     contigs = load_contigs(genome_file)
 
+#    print(contigs)
+
     logging.info("---------------------\ncleaning samples\n---------------------")
 
     positive_sample_cleaned = clean_sample(positive_sample, contigs)
@@ -97,6 +99,8 @@ def balance_trainingdata(label_file,
     logging.info("---------------------\nsaving results\n---------------------")
 
     sample_df = combine_samples(positive_sample_cleaned, negative_sample_cleaned)
+
+    #print(sample_df.head())
 
     if output_file:
         write_to_file(sample_df, output_file, bgzip)
