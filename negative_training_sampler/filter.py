@@ -63,7 +63,6 @@ def clean_sample(df, chroms):
     Returns:
         [dataframe] -- [sorted and cleaned dataframe]
     """
-    print(chroms)
     df.chrom = pd.Categorical(df.chrom,
                             categories=chroms,
                             ordered=True)
