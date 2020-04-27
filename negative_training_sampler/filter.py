@@ -5,7 +5,7 @@
 import logging
 import pandas as pd
 
-def get_negative(df):
+def get_negative(df, seed):
     """Samples negative labeled entries of a dataframe
     according to the gc content of the positive labeled entires.
 
@@ -34,7 +34,7 @@ def get_negative(df):
             else:
                 n = count
             neg_sample = neg_sample.append(neg
-                                           .sample(n=n, random_state=1)
+                                           .sample(n=n, random_state=seed)
                                            )
     return neg_sample
 
