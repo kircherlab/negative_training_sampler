@@ -63,13 +63,14 @@ def clean_sample(df, chroms):
     Returns:
         [dataframe] -- [sorted and cleaned dataframe]
     """
-    df.CHR = pd.Categorical(df.CHR,
+    print(chroms)
+    df.chrom = pd.Categorical(df.chrom,
                             categories=chroms,
                             ordered=True)
     if isinstance(df.index, pd.MultiIndex):
         df = df.droplevel(0)
     df_cleaned = (df.dropna()
-                  .sort_values(by=["CHR", "START"])
+                  .sort_values(by=["chrom", "chromStart"])
                   .reset_index()
                   .drop(columns="index"))
     return df_cleaned

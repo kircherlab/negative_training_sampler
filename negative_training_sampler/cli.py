@@ -31,6 +31,7 @@ from negative_training_sampler.negative_training_balancer import balance_trainin
 @click.option("-n",
               "--label_num",
               type=click.INT,
+              default=1,
               help="Number of separate label columns.")
 @click.option("--precision",
               default=2,
