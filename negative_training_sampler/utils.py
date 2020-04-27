@@ -17,4 +17,4 @@ def combine_samples(positive_sample_cleaned, negative_sample_cleaned):
     """
 
     return pd.concat([positive_sample_cleaned, negative_sample_cleaned],
-                     axis=0).sort_values(by=["CHR", "START"])
+                     axis=0).sort_values(by=["chrom", "chromStart"])

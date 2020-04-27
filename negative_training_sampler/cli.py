@@ -31,6 +31,7 @@ from negative_training_sampler.negative_training_balancer import balance_trainin
 @click.option("-n",
               "--label_num",
               type=click.INT,
+              default=1,
               help="Number of separate label columns.")
 @click.option("--precision",
               default=2,
@@ -47,6 +48,11 @@ from negative_training_sampler.negative_training_balancer import balance_trainin
 @click.option("--verbose",
               is_flag=True,
               help="Will print verbose messages.")
+@click.option("--seed",
+              "seed",
+              type=click.INT,
+              default=None,
+              help="Sets the seed for sampling.")
 @click.option("--cores",
               default=1,
               type=int,
@@ -55,7 +61,7 @@ from negative_training_sampler.negative_training_balancer import balance_trainin
               default="2GB",
               help="amount of memory per core (e.g. 2 cores * 2GB = 4GB)\ndefault: 2GB")
 def cli(label_file, reference_file, genome_file, output_file, precision, label_num,
-        bgzip, log_file, verbose, cores, memory): # pylint: disable=no-value-for-parameter
+        bgzip, log_file, verbose, seed, cores, memory): # pylint: disable=no-value-for-parameter
     '''
     A simple script that takes a tsv file with positive and negative labels
     and a reference file. Generates negative samples with the same GC distribution
@@ -71,6 +77,7 @@ def cli(label_file, reference_file, genome_file, output_file, precision, label_n
                          bgzip=bgzip,
                          log_file=log_file,
                          verbose=verbose,
+                         seed=seed,
                          cores=cores,
                          memory_per_core=memory
                          )

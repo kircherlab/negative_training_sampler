@@ -44,9 +44,10 @@ def load_contigs(genome_file):
         [list] -- list containing contigs of the genome file
     """
 
-    contigs = set()
+    contigs = list()
     with open(genome_file) as file:
         genome_file_reader = csv.reader(file, delimiter='\t')
         for contig in genome_file_reader:
-            contigs.add(contig[0])
-    return list(contigs)
+            if contig[0] not in contigs:
+                contigs.append(contig[0])
+    return contigs

@@ -25,6 +25,7 @@ def balance_trainingdata(label_file,
                          bgzip,
                          log_file,
                          verbose,
+                         seed,
                          cores=1,
                          memory_per_core='2GB'):
     """
@@ -41,6 +42,8 @@ def balance_trainingdata(label_file,
         label_num {int}         -- [Number of provided label columns]
         bgzip {boolean}         -- [output is compressed or not]
         log_file {str}          -- [Log file to write out loggin. If not None.]
+        verbose {flag}          -- [Enables verbose mode.]
+        seed {int}              -- [Sets the seed for sampling.]
         cores {int}             -- [Number of cores, default is 1. ]
         memory_per_core {str}   -- [Amount of memory per core.
                                     Accepted format [number]GB. Default is 2GB]
@@ -78,12 +81,15 @@ def balance_trainingdata(label_file,
 
     dts = dict(cl_gc.dtypes)
     negative_sample = (cl_gc.groupby(["chrom"], group_keys=False).apply(get_negative,
+                                                                        seed,
                                                                         meta=dts)
                        ).compute()
 
     logging.info("---------------------\nloading contigs...\n---------------------")
 
     contigs = load_contigs(genome_file)
+
+#    print(contigs)
 
     logging.info("---------------------\ncleaning samples\n---------------------")
 
@@ -93,6 +99,8 @@ def balance_trainingdata(label_file,
     logging.info("---------------------\nsaving results\n---------------------")
 
     sample_df = combine_samples(positive_sample_cleaned, negative_sample_cleaned)
+
+    #print(sample_df.head())
 
     if output_file:
         write_to_file(sample_df, output_file, bgzip)

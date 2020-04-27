@@ -12,11 +12,13 @@
 
 - adding a logger using logging. with --log the log file can be written.
 
-### Issue #5
+### Issue #11
 
-- complete support for bed files
-- added option to specify number of label columns
-- minor refactoring
+- added seed option to CLI
+    - seed is used for reproducing sampling results when debugging
+
+- bugfix unordered chromosomes
+    - output data is again properly ordered by chrom and chromStart
 
 ### Issue #6
 
@@ -37,6 +39,12 @@
 - minor bugfixes
     - debug output is now written to stderr
     - rename genome_file to reference-file
+
+### Issue #5
+
+- complete support for bed files
+- added option to specify number of label columns
+- minor refactoring
 
 ## v0.1.0
 
