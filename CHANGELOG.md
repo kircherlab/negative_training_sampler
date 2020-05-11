@@ -2,6 +2,8 @@
 
 ## develop
 
+## 0.3.0
+
 - adding command line option --precision to round the precision of decimals defining smaller or larger GC buckets
 - bugfix when number negatives != 0 but positives > negatives
 - bugfix in stdn out (is now tab separated)
