@@ -1,5 +1,7 @@
 # negative_training_sampler Changelog
 
+## develop
+
 ## 0.3.0
 
 - adding command line option --precision to round the precision of decimals defining smaller or larger GC buckets
