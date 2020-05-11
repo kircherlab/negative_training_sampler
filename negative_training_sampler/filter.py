@@ -2,10 +2,10 @@
 
 """calculates gc content for coordinates in a .bed file"""
 
-import pandas as pd
 import logging
+import pandas as pd
 
-def get_negative(df):
+def get_negative(df, seed):
     """Samples negative labeled entries of a dataframe
     according to the gc content of the positive labeled entires.
 
@@ -29,9 +29,12 @@ def get_negative(df):
             logging.info("len of neg: {}")
             logging.info(gc, count)
         else:
-            frac = count/len(neg)
+            if (count > len(neg)):
+                n = len(neg)
+            else:
+                n = count
             neg_sample = neg_sample.append(neg
-                                           .sample(frac=frac, random_state=1)
+                                           .sample(n=n, random_state=seed)
                                            )
     return neg_sample
 
@@ -60,13 +63,13 @@ def clean_sample(df, chroms):
     Returns:
         [dataframe] -- [sorted and cleaned dataframe]
     """
-    df.CHR = pd.Categorical(df.CHR,
-                            categories=chroms,
-                            ordered=True)
+    df.chrom = pd.Categorical(df.chrom,
+                              categories=chroms,
+                              ordered=True)
     if isinstance(df.index, pd.MultiIndex):
         df = df.droplevel(0)
     df_cleaned = (df.dropna()
-                  .sort_values(by=["CHR", "START"])
+                  .sort_values(by=["chrom", "chromStart"])
                   .reset_index()
                   .drop(columns="index"))
     return df_cleaned

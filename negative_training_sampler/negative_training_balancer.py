@@ -20,9 +20,12 @@ def balance_trainingdata(label_file,
                          reference_file,
                          genome_file,
                          output_file,
+                         precision,
+                         label_num,
                          bgzip,
                          log_file,
                          verbose,
+                         seed,
                          cores=1,
                          memory_per_core='2GB'):
     """
@@ -35,24 +38,28 @@ def balance_trainingdata(label_file,
         reference_file {str}    -- [Path to a reference genome in FASTA format]
         genome_file {str}       -- [Path to the genome file of the reference]
         output_file {str}       -- [Name of the output file. File will be in .bed format]
+        precision {int}         -- [Precision of decimals when computing the attributes like GC content]
+        label_num {int}         -- [Number of provided label columns]
         bgzip {boolean}         -- [output is compressed or not]
         log_file {str}          -- [Log file to write out loggin. If not None.]
+        verbose {flag}          -- [Enables verbose mode.]
+        seed {int}              -- [Sets the seed for sampling.]
         cores {int}             -- [Number of cores, default is 1. ]
         memory_per_core {str}   -- [Amount of memory per core.
                                     Accepted format [number]GB. Default is 2GB]
     """
 
-    logLevel = logging.INFO
-    format='%(message)s'
+    loglevel = logging.INFO
+    logformat = '%(message)s'
     if verbose:
-        logLevel = logging.DEBUG
-        format = "%(asctime)s: %(levelname)s - %(message)s"
+        loglevel = logging.DEBUG
+        logformat = "%(asctime)s: %(levelname)s - %(message)s"
     if log_file is not None:
-        logging.basicConfig(filename=log_file, level=logLevel, format=format)
+        logging.basicConfig(filename=log_file, level=loglevel, format=logformat)
     elif output_file is not None:
-        logging.basicConfig(stream=sys.stdout, level=logLevel, format=format)
+        logging.basicConfig(stream=sys.stdout, level=loglevel, format=logformat)
     else:
-        logging.basicConfig(stream=sys.stderr, level=logLevel, format=format)
+        logging.basicConfig(stream=sys.stderr, level=loglevel, format=logformat)
 
     logging.info("---------------------\nstarting workers...\n---------------------")
 
@@ -64,7 +71,7 @@ def balance_trainingdata(label_file,
 
     logging.info("---------------------\ncalculating GC content...\n---------------------")
 
-    cl_gc = get_gc(label_file, reference_file)
+    cl_gc = get_gc(label_file, reference_file, label_num, precision)
 
     logging.info("---------------------\nextracting positive samples...\n---------------------")
 
@@ -73,13 +80,16 @@ def balance_trainingdata(label_file,
     logging.info("---------------------\nbalancing negative sample set...\n---------------------")
 
     dts = dict(cl_gc.dtypes)
-    negative_sample = (cl_gc.groupby(["CHR"], group_keys=False).apply(get_negative,
-                                                                      meta=dts)
+    negative_sample = (cl_gc.groupby(["chrom"], group_keys=False).apply(get_negative,
+                                                                        seed,
+                                                                        meta=dts)
                        ).compute()
 
     logging.info("---------------------\nloading contigs...\n---------------------")
 
     contigs = load_contigs(genome_file)
+
+#    print(contigs)
 
     logging.info("---------------------\ncleaning samples\n---------------------")
 
@@ -90,10 +100,12 @@ def balance_trainingdata(label_file,
 
     sample_df = combine_samples(positive_sample_cleaned, negative_sample_cleaned)
 
+    #print(sample_df.head())
+
     if output_file:
         write_to_file(sample_df, output_file, bgzip)
     else:
-        write_to_stdout(sample_df)
+        write_to_stdout(sample_df, precision)
 
     logging.info("---------------------\nshutting down workers...\n---------------------")
 
