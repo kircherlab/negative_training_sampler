@@ -1,12 +1,12 @@
 # negative_training_sampler
 
-This package takes a minimal bed file with positive (1) and negative (0) labeled genomic coordinates, calculates their gc content and balances positive and negative labeled entries per chromosome based on their respective GC content.
+This package takes a (minimal) bed file with positive (1) and negative (0) labeled genomic coordinates, calculates their gc content and balances positive and negative labeled entries per chromosome based on their respective GC content.
 
 ## Installation
 
 ### Requirements
 
-The negative_trainin_sampler uses pybedtools to calculate the GC content for the provided regions. Pybedtools depends on bedtools, so make sure bedtools is installed. Otherwise install it manually: [bedtools installation guide](https://bedtools.readthedocs.io/en/latest/content/installation.html)
+The negative_training_sampler uses pybedtools to calculate the GC content for the provided regions. Pybedtools depends on bedtools, so make sure bedtools is installed. Otherwise install it manually: [bedtools installation guide](https://bedtools.readthedocs.io/en/latest/content/installation.html)
 
 Other Dependencies:
 
@@ -28,7 +28,7 @@ pip install -e /path/to/repo
 
 ## Usage
 
-The package needs a minimal bed file with positive (1) and negative (0) labeled regions in one file, a reference genome in fasta format and an output file. For more details see [input](###input) section.
+The package needs at least a minimal bed file with positive (1) and negative (0) labeled regions in one file, a reference genome in fasta format and the corresponding genome file. The output will be written to stdout or to an output file specified with the '-o' option. For more details see [input](###input) section.
 
 General use:
 
@@ -39,7 +39,7 @@ negative_input_sampler -i LABEL_FILE -r REFERENCE_FILE -g GENOME_FILE -o OUTPUT_
 More advanced use:
 
 ```bash
-negative_input_sampler -i LABEL_FILE -r REFERENCE_FILE -g GENOME_FILE -o OUTPUT_FILE --cores INT --memory [int]GB
+negative_input_sampler -i LABEL_FILE -r REFERENCE_FILE -g GENOME_FILE -o OUTPUT_FILE --cores INT --memory [INT]GB
 ```
 
 ### help
@@ -60,25 +60,35 @@ Usage: negative_training_sampler [OPTIONS]
   distribution as the positive samples per chromosome.
 
 Options:
-  -i, --label-file PATH      Input bed file with labeled regions  [required]
-  -r, --reference-file PATH  Input genome reference in fasta format
+  -i, --label-file PATH      Input bed file with labeled regions.  [required]
+  -r, --reference-file PATH  Input genome reference in fasta format.
                              [required]
 
   -g, --genome-file PATH     Input genome file of reference  [required]
   -o, --output_file PATH     Path to output file.
+  -n, --label_num INTEGER    Number of separate label columns. Default=1
+  --precision INTEGER        Precision of decimals when computing the
+                             attributes like GC content.
+
   -c, --bgzip                Output will be bgzipped.
   --log PATH                 Write logging to this file.
   --verbose                  Will print verbose messages.
-  --cores INTEGER            number of used cores default: 1
-  --memory TEXT              amount of memory per core (e.g. 2 cores * 2GB =
+  --seed INTEGER             Sets the seed for sampling.
+  --cores INTEGER            Number of used cores default: 1
+  --memory TEXT              Amount of memory per core (e.g. 2 cores * 2GB =
                              4GB) default: 2GB
 
   --help                     Show this message and exit.
+
 ```
 
 ### input
 
-Example input:
+Input files are in bed format with a minimum of the three required bed field (chrom, chromStart, chromEnd) and up to all 12 bed field. Additionally, at least one label column containing numerical binary labels (0 and 1) is required.
+
+**Note:** It is recommend to have genomic windows of the same size to minimize sampling bias. One way to generate labeled windows of equal size, is to use [Seqdataloader](https://github.com/kundajelab/seqdataloader).
+
+Minimal input example:
 
 ```bash
 chr1    191200  191500  0.0
@@ -91,9 +101,11 @@ chr1    362850  363150  1.0
 chr1    362900  363200  1.0
 ```
 
-**Note:** Columns are chr, start, stop, label.
+**Note:** Columns are chrom, chromStart, chromEnd, label.
 
 ### output
+
+Output contains information from Input (bed fields) and an additional column containing information on the GC content of the region.
 
 example output:
 
@@ -110,7 +122,7 @@ chr1    381650  381950  1.0     71.3333
 chr1    381700  382000  1.0     68.6667
 ```
 
-**Note:** The output is split in two files, one containing the positive samples and one containing the negative samples.
+**Note:** The output is written to stdout by default or to a file, if an output files is specified by the -o option.
 
 ## Licence
 
