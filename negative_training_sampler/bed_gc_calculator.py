@@ -10,9 +10,6 @@ BEDCOLS = ["chrom", "chromStart", "chromEnd",
            "thickStart", "thickEnd", "itemRGB",
            "blockCount", "blockSizes", "blockStarts"]
 
-# TODO -> look for a solution for labels -> minority class = default
-# TODO -> option to specify label directly
-# ! label has to be the last column of input file!
 
 def generate_colnames(df, label_num):
     """Generates column names for an input dataframe.
@@ -55,8 +52,6 @@ def get_gc(label_file, reference_file, label_num, precision):
     gc_df["gc"] = gc_df["gc"].round(precision)
     return gc_df
 
-# TODO add functionality for command line use
-# TODO make main function "private" -> underscore?
 
 def main():
     """[summary]

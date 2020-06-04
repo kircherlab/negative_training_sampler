@@ -1,6 +1,12 @@
 # negative_training_sampler Changelog
 
-## 0.3.0
+## develop
+
+## v0.3.1
+
+- updated documentation
+
+## v0.3.0
 
 - adding command line option --precision to round the precision of decimals defining smaller or larger GC buckets
 - bugfix when number negatives != 0 but positives > negatives
@@ -30,7 +36,6 @@
 - minor bugfixes
     - debug output is now written to stderr
     - rename genome_file to reference-file
-
 
 ## v0.1.0
 
