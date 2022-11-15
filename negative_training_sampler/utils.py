@@ -5,7 +5,7 @@
 import pandas as pd
 
 
-def combine_samples(positive_sample_cleaned, negative_sample_cleaned):
+def combine_samples(positive_sample_cleaned, negative_sample_cleaned, sort=True):
     """Combines positive an negative samples into on dataframe.
 
     Arguments:
@@ -16,5 +16,9 @@ def combine_samples(positive_sample_cleaned, negative_sample_cleaned):
         [dataframe] -- Dataframe containing positive and negative labeled samples
     """
 
-    return pd.concat([positive_sample_cleaned, negative_sample_cleaned],
-                     axis=0).sort_values(by=["chrom", "chromStart"])
+    if sort:
+        return pd.concat([positive_sample_cleaned, negative_sample_cleaned],
+                         axis=0).sort_values(by=["chrom", "chromStart"])
+    else:
+        return pd.concat([positive_sample_cleaned, negative_sample_cleaned],
+                         axis=0)
