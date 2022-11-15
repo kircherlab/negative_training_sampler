@@ -20,6 +20,12 @@ dependencies:
 
 ### Setup
 
+It is recommended to setup a conda environment prior to installing the package. By doing so, one has more control over the bedtools version used by pybedtools.
+
+```bash
+env create -n negative_training_sampler --file environment.yml
+```
+
 Installing the package:
 
 ```bash
@@ -33,13 +39,13 @@ The package needs at least a minimal bed file with positive (1) and negative (0)
 General use:
 
 ```bash
-negative_input_sampler -i LABEL_FILE -r REFERENCE_FILE -g GENOME_FILE -o OUTPUT_FILE
+negative_training_sampler -i LABEL_FILE -r REFERENCE_FILE -g GENOME_FILE -o OUTPUT_FILE
 ```
 
 More advanced use:
 
 ```bash
-negative_input_sampler -i LABEL_FILE -r REFERENCE_FILE -g GENOME_FILE -o OUTPUT_FILE --cores INT --memory [INT]GB
+negative_training_sampler -i LABEL_FILE -r REFERENCE_FILE -g GENOME_FILE -o OUTPUT_FILE --cores INT --memory [INT]GB
 ```
 
 ### help
