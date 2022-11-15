@@ -5,6 +5,7 @@
 import dask.dataframe as dd
 import dask.bag as db
 import pandas as pd
+import gzip
 
 COLUMNS = ["chrom", "chromStart", "chromEnd"]
 
@@ -71,7 +72,11 @@ def get_gc(fasta_file, label_num, precision):
         [dataframe] -- [Dataframe containing viable entries and their respective gc content]
     """
     colnames = generate_colnames(label_num)
-    file_handle = open(fasta_file, 'r')
+
+    if fasta_file.endswith(".gz"):
+        file_handle = gzip.open(fasta_file, 'rt')
+    else:
+        file_handle = open(fasta_file, 'r')
     seq_db = db.from_sequence([i for i in read_fasta(file_handle)])
     seq_dd = dd.from_pandas(pd.DataFrame({"gc":db.map(compute_gc,seq_db).compute(),"label_1":1},columns=colnames), npartitions=1)
     
