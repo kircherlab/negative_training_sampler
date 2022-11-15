@@ -17,19 +17,21 @@ from negative_training_sampler.fasta_gc_calculator import get_gc as get_fasta_gc
 from negative_training_sampler.utils import combine_samples
 
 
-def balance_trainingdata(label_file,
-                         reference_file,
-                         genome_file,
-                         output_file,
-                         fasta_file,
-                         precision,
-                         label_num,
-                         bgzip,
-                         log_file,
-                         verbose,
-                         seed,
-                         cores=1,
-                         memory_per_core='2GB'):
+def balance_trainingdata(
+    label_file,
+    reference_file,
+    genome_file,
+    output_file,
+    fasta_file,
+    precision,
+    label_num,
+    bgzip,
+    log_file,
+    verbose,
+    seed,
+    cores=1,
+    memory_per_core="2GB",
+):
     """
     Function that calculates the GC content for positive and negative labeled genomic regions and
     balances their number based on GC content per chromosome.
@@ -53,7 +55,7 @@ def balance_trainingdata(label_file,
     """
 
     loglevel = logging.INFO
-    logformat = '%(message)s'
+    logformat = "%(message)s"
     if verbose:
         loglevel = logging.DEBUG
         logformat = "%(asctime)s: %(levelname)s - %(message)s"
@@ -69,39 +71,49 @@ def balance_trainingdata(label_file,
 
     logging.info("---------------------\nstarting workers...\n---------------------")
 
-    client = Client(n_workers=cores,
-                    threads_per_worker=1,
-                    memory_limit=memory_per_core,
-                    dashboard_address=None)
+    client = Client(
+        n_workers=cores,
+        threads_per_worker=1,
+        memory_limit=memory_per_core,
+        dashboard_address=None,
+    )
     client  # pylint: disable=pointless-statement
 
-    logging.info("---------------------\ncalculating GC content...\n---------------------")
+    logging.info(
+        "---------------------\ncalculating GC content...\n---------------------"
+    )
 
     cl_gc = get_gc(label_file, reference_file, label_num, precision)
     if useFastaAsPositive():
         positive_sample = get_fasta_gc(fasta_file, precision)
-        cl_gc = combine_samples(cl_gc, positive_sample, sort=False))
+        cl_gc = combine_samples(cl_gc, positive_sample, sort=False)
 
-    logging.info("---------------------\nextracting positive samples...\n---------------------")
+    logging.info(
+        "---------------------\nextracting positive samples...\n---------------------"
+    )
 
     if not useFastaAsPositive():
         positive_sample = get_positive(cl_gc)
 
-    logging.info("---------------------\nbalancing negative sample set...\n---------------------")
+    logging.info(
+        "---------------------\nbalancing negative sample set...\n---------------------"
+    )
 
     dts = dict(cl_gc.dtypes)
     if useFastaAsPositive():
         negative_sample = (cl_gc.apply(get_negative, seed, meta=dts)).compute()
     else:
-        negative_sample = (cl_gc.groupby(["chrom"], group_keys=False).apply(get_negative,
-                                                                            seed,
-                                                                            meta=dts)).compute()
+        negative_sample = (
+            cl_gc.groupby(["chrom"], group_keys=False).apply(
+                get_negative, seed, meta=dts
+            )
+        ).compute()
 
     logging.info("---------------------\nloading contigs...\n---------------------")
 
     contigs = load_contigs(genome_file)
 
-#    print(contigs)
+    #    print(contigs)
 
     logging.info("---------------------\ncleaning samples\n---------------------")
 
@@ -123,6 +135,8 @@ def balance_trainingdata(label_file,
     else:
         write_to_stdout(sample_df, precision)
 
-    logging.info("---------------------\nshutting down workers...\n---------------------")
+    logging.info(
+        "---------------------\nshutting down workers...\n---------------------"
+    )
 
     client.close()
