@@ -3,15 +3,13 @@
 """calculates gc content for coordinates in a .bed file"""
 
 import dask.dataframe as dd
-import pybedtools
+import dask.bag as db
+import pandas as pd
 
-BEDCOLS = ["chrom", "chromStart", "chromEnd",
-           "name", "score", "strand",
-           "thickStart", "thickEnd", "itemRGB",
-           "blockCount", "blockSizes", "blockStarts"]
+COLUMNS = ["chrom", "chromStart", "chromEnd"]
 
 
-def generate_colnames(df, label_num):
+def generate_colnames(label_num):
     """Generates column names for an input dataframe.
 
     Arguments:
@@ -21,16 +19,47 @@ def generate_colnames(df, label_num):
     Returns:
         [list] -- [list of generated column names]
     """
-    colnames = []
-    for i in range(df.columns.str.contains("usercol").sum()-label_num):
-        colnames.append(BEDCOLS[i])
+    colnames = [] + COLUMNS
     for i in range(label_num):
         colnames.append("label_{}".format(i+1))
     colnames.append("gc")
-    colnames.append("num_N")
     return colnames
 
-def get_gc(fasta_file, precision):
+def read_fasta(filehandle):
+    """
+    Reads fasta entries from filehandle
+    supports multiline fasta
+    """
+    count = 0
+    seq = ""
+    id = ""
+    for line in filehandle:
+        line = line.rstrip("\n\r")
+        if ( (count == 0) and line.startswith(">")): # Read identifier
+            id = line[1:]
+            count+=1
+        elif count == 1:        # read sequence
+            seq = line
+            count+=1
+        elif count == 2:  # multiple case:  a) more sequence (fasta), c) next sequence identifier (fasta)
+            if line.startswith(">") : # case c)
+                yield seq
+                id, seq  = None, None
+                count = 1
+                id = line[1:]
+            else: # case b)
+                seq = seq + line
+        else:
+          sys.stderr.write("Unexpected line:" + str(line.strip()) + "\n")
+          count = 0
+    if id and seq:
+        yield seq
+    return
+
+def compute_gc(seq):
+    return (seq.count("G")+seq.count("C")+seq.count("c")+seq.count("g"))/(len(seq)-seq.count("n")-seq.count("N"))
+
+def get_gc(fasta_file, label_num, precision):
     """Calculates gc content for all viable entries in an input dataframe.
 
     Arguments:
@@ -41,16 +70,14 @@ def get_gc(fasta_file, precision):
     Returns:
         [dataframe] -- [Dataframe containing viable entries and their respective gc content]
     """
-    bed_df = pybedtools.BedTool(label_file)
-    bed_gc = bed_df.nuc(reference_file)
-    gc_df = dd.read_table(bed_gc.fn)
-    gc_df = gc_df.loc[:, gc_df.columns.str.contains("usercol|gc|num_N")]
-    colnames = generate_colnames(gc_df, label_num)
-    gc_df.columns = colnames
-    gc_df = gc_df.loc[gc_df.num_N == 0].drop("num_N", axis=1)
-    gc_df["gc"] = gc_df["gc"].astype("float32")*100
-    gc_df["gc"] = gc_df["gc"].round(precision)
-    return gc_df
+    colnames = generate_colnames(label_num)
+    file_handle = open(fasta_file, 'r')
+    seq_db = db.from_sequence([i for i in read_fasta(file_handle)])
+    seq_dd = dd.from_pandas(pd.DataFrame({"gc":db.map(compute_gc,seq_db).compute(),"label_1":1},columns=colnames), npartitions=1)
+    
+    seq_dd["gc"] = seq_dd["gc"].astype("float32")*100
+    seq_dd["gc"] = seq_dd["gc"].round(precision)
+    return seq_dd
 
 
 def main():

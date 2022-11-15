@@ -15,6 +15,7 @@ from negative_training_sampler.io import write_to_stdout
 from negative_training_sampler.io import load_contigs
 from negative_training_sampler.fasta_gc_calculator import get_gc as get_fasta_gc
 from negative_training_sampler.utils import combine_samples
+from negative_training_sampler.utils import combine_dataframe
 
 
 def balance_trainingdata(
@@ -85,15 +86,14 @@ def balance_trainingdata(
 
     cl_gc = get_gc(label_file, reference_file, label_num, precision)
     if useFastaAsPositive():
-        positive_sample = get_fasta_gc(fasta_file, precision)
-        cl_gc = combine_samples(cl_gc, positive_sample, sort=False)
+        positive_sample = get_fasta_gc(fasta_file, label_num, precision)
+        cl_gc = combine_dataframe(cl_gc, positive_sample)
 
     logging.info(
         "---------------------\nextracting positive samples...\n---------------------"
     )
-
-    if not useFastaAsPositive():
-        positive_sample = get_positive(cl_gc)
+    
+    positive_sample = get_positive(cl_gc)
 
     logging.info(
         "---------------------\nbalancing negative sample set...\n---------------------"
@@ -101,7 +101,7 @@ def balance_trainingdata(
 
     dts = dict(cl_gc.dtypes)
     if useFastaAsPositive():
-        negative_sample = (cl_gc.apply(get_negative, seed, meta=dts)).compute()
+        negative_sample = get_negative(cl_gc.compute(), seed)
     else:
         negative_sample = (
             cl_gc.groupby(["chrom"], group_keys=False).apply(
@@ -117,16 +117,15 @@ def balance_trainingdata(
 
     logging.info("---------------------\ncleaning samples\n---------------------")
 
-    if not useFastaAsPositive():
+    if useFastaAsPositive():
+        positive_sample_cleaned = positive_sample
+    else:
         positive_sample_cleaned = clean_sample(positive_sample, contigs)
     negative_sample_cleaned = clean_sample(negative_sample, contigs)
 
     logging.info("---------------------\nsaving results\n---------------------")
 
-    if useFastaAsPositive():
-        sample_df = negative_sample_cleaned.sort_values(by=["chrom", "chromStart"])
-    else:
-        sample_df = combine_samples(positive_sample_cleaned, negative_sample_cleaned)
+    sample_df = combine_samples(positive_sample_cleaned, negative_sample_cleaned)
 
     # print(sample_df.head())
 

@@ -3,6 +3,7 @@
 """Utility functions"""
 
 import pandas as pd
+import dask.dataframe as dd
 
 
 def combine_samples(positive_sample_cleaned, negative_sample_cleaned, sort=True):
@@ -22,3 +23,17 @@ def combine_samples(positive_sample_cleaned, negative_sample_cleaned, sort=True)
     else:
         return pd.concat([positive_sample_cleaned, negative_sample_cleaned],
                          axis=0)
+
+
+def combine_dataframe(sample_1, sample_2):
+    """Combines two dask dataframes.
+
+    Arguments:
+        sample_1 {dask dataframe} -- Dataframe containing sample 1
+        sample_2 {dask dataframe} -- Dataframe containing sample 2
+
+    Returns:
+        [dataframe] -- Dask Dataframe containing sample 1 and sample 2
+    """
+
+    return dd.concat([sample_1,sample_2])
