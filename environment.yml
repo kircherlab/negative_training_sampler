@@ -6,6 +6,7 @@ channels:
 dependencies:
   - click
   - pandas
+  - bedtools
   - pybedtools
   - dask
 

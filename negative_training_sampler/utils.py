@@ -3,9 +3,10 @@
 """Utility functions"""
 
 import pandas as pd
+import dask.dataframe as dd
 
 
-def combine_samples(positive_sample_cleaned, negative_sample_cleaned):
+def combine_samples(positive_sample_cleaned, negative_sample_cleaned, sort=True):
     """Combines positive an negative samples into on dataframe.
 
     Arguments:
@@ -16,5 +17,23 @@ def combine_samples(positive_sample_cleaned, negative_sample_cleaned):
         [dataframe] -- Dataframe containing positive and negative labeled samples
     """
 
-    return pd.concat([positive_sample_cleaned, negative_sample_cleaned],
-                     axis=0).sort_values(by=["chrom", "chromStart"])
+    if sort:
+        return pd.concat([positive_sample_cleaned, negative_sample_cleaned],
+                         axis=0).sort_values(by=["chrom", "chromStart"])
+    else:
+        return pd.concat([positive_sample_cleaned, negative_sample_cleaned],
+                         axis=0)
+
+
+def combine_dataframe(sample_1, sample_2):
+    """Combines two dask dataframes.
+
+    Arguments:
+        sample_1 {dask dataframe} -- Dataframe containing sample 1
+        sample_2 {dask dataframe} -- Dataframe containing sample 2
+
+    Returns:
+        [dataframe] -- Dask Dataframe containing sample 1 and sample 2
+    """
+
+    return dd.concat([sample_1,sample_2])
